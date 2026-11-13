@@ -1,0 +1,30 @@
+{
+  "name": "tactyqal-hireathon",
+  "private": true,
+  "packageManager": "pnpm@11.25.0",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @tactyqal/contracts build && pnpm -r --parallel dev",
+    "dev:homepage": "pnpm --filter @tactyqal/homepage dev",
+    "dev:blog": "pnpm --filter @tactyqal/contracts build && pnpm --filter @tactyqal/blog-web dev",
+    "dev:api": "pnpm --filter @tactyqal/contracts build && pnpm --filter @tactyqal/blog-api dev",
+    "build": "pnpm --filter @tactyqal/contracts build && pnpm --filter @tactyqal/homepage build && pnpm --filter @tactyqal/blog-api build && pnpm --filter @tactyqal/blog-web build",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "eslint apps packages scripts",
+    "db:migrate": "pnpm --filter @tactyqal/blog-api db:migrate",
+    "db:seed": "pnpm --filter @tactyqal/blog-api db:seed",
+    "test:integration": "pnpm --filter @tactyqal/blog-api test:integration",
+    "test:browser": "node scripts/browser-smoke.mjs",
+    "test": "pnpm --filter @tactyqal/contracts build && node --test-isolation=none --test packages/contracts/test/*.test.mjs"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
+    "@types/node": "25.9.3",
+    "eslint": "9.39.5",
+    "playwright": "1.64.1",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.71.2"
+  }
+}

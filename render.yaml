@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: tactyqal-blog-api
+    runtime: node
+    buildCommand: corepack pnpm install --frozen-lockfile && corepack pnpm --filter @tactyqal/blog-api... build
+    startCommand: corepack pnpm --filter @tactyqal/blog-api start
+    healthCheckPath: /health/ready
+    envVars:
+      - key: NODE_VERSION
+        value: 24.13.0
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false

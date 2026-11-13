@@ -1,0 +1,17 @@
+node_modules/
+.next/
+dist/
+*.tsbuildinfo
+.env
+.env.local
+.env.test
+!.env.example
+!**/.env.example
+playwright-report/
+test-results/
+.local/
+.playwright-mcp/
+docs
+scripts
+test
+.github

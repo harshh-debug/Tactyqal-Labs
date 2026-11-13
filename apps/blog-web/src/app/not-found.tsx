@@ -1,0 +1,1 @@
+export default function NotFound() { return <main id="main" className="shell message-page"><h1>This page isn’t here.</h1><p>It may be unpublished, deleted, or a URL that does not exist.</p><a className="button" href="/blog">Explore the articles</a></main>; }
