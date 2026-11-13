@@ -17,13 +17,13 @@ export function PostEditor({ post, categories }: {
     const isNew = !post;
     const values = state.values;
     const value = (key: string, fallback = '') => values?.[key] ?? fallback;
-    useEffect(() => { if (state.saved) {
-        if (isNew) {
+    useEffect(() => {
+        if (!state.saved)
+            return;
+        if (isNew)
             router.replace(`/studio/posts/${state.saved.id}`);
-        }
         router.refresh();
-    } if (state.deleted)
-        router.replace('/studio/posts'); }, [state.saved, state.deleted, isNew, router]);
+    }, [state.saved, isNew, router]);
     const error = (name: string) => state.fieldErrors?.[name]?.join(' ');
     const status = current?.status || 'draft';
     return <form action={action} className="editor-form"><div className="editor-header"><div><a className="back-link" href="/studio/posts">← All posts</a><h1>{post ? 'Shape your fieldnote.' : 'Start something worth sharing.'}</h1><p><span className={`status ${status}`}>{status}</span>{current?.updatedAt && <span> Saved {new Date(current.updatedAt).toLocaleTimeString('en-GB')}</span>}</p></div><div className="editor-actions"><button className="button secondary" name="intent" value={status} disabled={pending}>{pending ? 'Saving…' : status === 'published' ? 'Save changes' : 'Save draft'}</button>{current && <button className="button" name="intent" value={status === 'published' ? 'draft' : 'published'} disabled={pending}>{status === 'published' ? 'Unpublish' : 'Publish'}</button>}</div></div>

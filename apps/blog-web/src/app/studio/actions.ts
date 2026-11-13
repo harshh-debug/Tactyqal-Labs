@@ -12,7 +12,6 @@ export interface ActionState {
     values?: Record<string, string>;
     saved?: AdminPost;
     expired?: boolean;
-    deleted?: boolean;
 }
 function failure(error: unknown): ActionState {
     if (error instanceof ApiError)
@@ -56,16 +55,24 @@ export async function savePost(id: string | null, _previous: ActionState, data: 
     const token = (await cookies()).get(cookieName)?.value;
     if (!token)
         return { message: 'Your session has expired. Sign in again, then save these changes.', values, expired: true };
+    if (values.intent === 'delete') {
+        if (!id || data.get('confirmDelete') !== 'yes')
+            return { message: 'Confirm deletion before continuing.', values };
+        try {
+            await api(`/admin/posts/${encodeURIComponent(id)}`, { method: 'DELETE' }, token);
+        }
+        catch (error) {
+            const result = failure(error);
+            if (result.expired)
+                (await cookies()).delete(cookieName);
+            return { ...result, values };
+        }
+        revalidatePath('/studio/posts');
+        revalidatePath('/blog');
+        redirect('/studio/posts');
+    }
     try {
         const intent = values.intent;
-        if (intent === 'delete') {
-            if (!id || data.get('confirmDelete') !== 'yes')
-                return { message: 'Confirm deletion before continuing.', values };
-            await api(`/admin/posts/${encodeURIComponent(id)}`, { method: 'DELETE' }, token);
-            revalidatePath('/studio/posts');
-            revalidatePath('/blog');
-            return { deleted: true, message: 'Post deleted.' };
-        }
         if (!['draft', 'published'].includes(intent))
             return { message: 'Choose Save draft, Publish, or Unpublish.', values };
         const payload = { title: values.title, slug: values.slug, excerpt: values.excerpt, body: values.body, categoryId: values.categoryId, coverPath: values.coverPath || null, coverAlt: values.coverAlt, status: intent };

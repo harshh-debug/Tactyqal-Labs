@@ -102,8 +102,8 @@ Run `node scripts/start-and-smoke.mjs` after a production build to start owned p
 
 ## Current verification and access limits
 
-Production builds, lint, typechecks and five contract tests pass. Homepage production HTML has been visually reviewed at desktop and mobile sizes; screenshots and the precise scope of that review are documented in `docs/qa/README.md`.
+Production builds, lint, typechecks and five contract tests pass. The disposable local PostgreSQL integration suite passes **8/8**. The production editorial browser smoke verified signed-out draft privacy, publication status codes, API restart persistence, deletion and unknown/unpublished 404s. Homepage production HTML has been visually reviewed at desktop and mobile sizes; screenshots and the precise scope of review are documented in `docs/qa/README.md`.
 
-This execution environment blocks external package downloads, listening ports and Docker access. Dependencies were recovered from existing local caches. The isolated Compose test connection is configured in an ignored `apps/blog-api/.env.test`, but `docker compose --profile test up -d postgres-test` was denied access to `/var/run/docker.sock`; no test database was created. The integration suite was attempted and its setup failed with `connect EPERM 127.0.0.1:5433`. API integration, real HTTP 404 checks and the complete browser editorial loop remain **pending**, not passed. Provider deployments, actual demo URLs, GitHub publication and recording also remain pending access.
+Local database and browser verification are complete. Provider deployments, actual HTTPS demo URLs, cross-link verification and a walkthrough recording remain pending provider access.
 
 Material departures from the briefs: the API currently uses parameterized `pg` queries and checked-in SQL migrations instead of Drizzle; bcrypt replaces the planned Argon2id choice; locally licensed Manrope substitutes for unavailable Instrument Sans. Bricolage Grotesque, the specified palette, program/content boundaries, app separation and deployment topology are preserved. See [implementation notes](docs/IMPLEMENTATION-NOTES.md).
